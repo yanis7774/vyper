@@ -1,4 +1,6 @@
 SHELL := /bin/bash
+OS := $(shell uname -s | tr A-Z a-z)
+VERSION := $(shell PYTHONPATH=. python vyper/cli/vyper_compile.py --version)
 
 ifeq (, $(shell which pip3))
 	pip := $(shell which pip3)
@@ -20,6 +22,10 @@ test:
 lint:
 	tox -e lint
 
+freeze: clean-build clean-pyc clean-test
+	echo Generating binary...
+	pyinstaller --clean --onefile vyper/cli/vyper_compile.py --name vyper.$(VERSION).$(OS) --add-data vyper:vyper
+
 clean: clean-build clean-pyc clean-snap clean-test
 
 clean-build:
@@ -27,6 +33,7 @@ clean-build:
 	@rm -fr build/
 	@rm -fr dist/
 	@rm -fr *.egg-info
+	@rm -fr *.spec
 
 clean-pyc:
 	@echo Cleaning python files...

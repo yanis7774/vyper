@@ -39,6 +39,12 @@ CALL docs\make html
 START docs\_build\html\index.html
 goto :end
 
+:freeze
+CALL :clean
+for /f "delims=" %%a in ('vyper --version') do @set VERSION=%%a
+pyinstaller --clean --onefile vyper/cli/vyper_compile.py --name vyper.%VERSION%.windows --add-data vyper;vyper
+goto :end
+
 :clean
 CALL :clean-build
 CALL :clean-pyc
