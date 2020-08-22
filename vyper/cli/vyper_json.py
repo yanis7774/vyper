@@ -15,7 +15,7 @@ from typing import (
 import warnings
 
 import vyper
-from vyper.cli.vyper_compile import (
+from vyper.cli.utils import (
     get_interface_file_path,
 )
 from vyper.exceptions import (
